@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const path = require('path')
+
 const withTM = require('next-transpile-modules')([
   "@fullcalendar/common",
   "@babel/preset-react",
@@ -11,6 +13,9 @@ const withTM = require('next-transpile-modules')([
 
 const nextConfig = {
   reactStrictMode: true,
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'styles')],
+  },
 }
 
 module.exports = withTM(nextConfig)
