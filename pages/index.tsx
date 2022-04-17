@@ -1,50 +1,32 @@
-import React, { useState } from 'react'
-import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
-import FullCalendar, { DateSelectArg } from '@fullcalendar/react';
-import interactionPlugin from '@fullcalendar/interaction';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import DateModal from '../components/DateModal';
+import React, { useEffect, useState } from "react";
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
+import styles from "../styles/Home.module.css";
+import DateModal from "../components/DateModal";
+const Calendar = dynamic(() => import("../components/Calendar"), {
+  ssr: false,
+});
 
 const Home: NextPage = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [show, setShow] = useState(false);
-
-  const handleShow = () => setShow(true);
-
-  const toolbar = {
-    start: 'title', // will normally be on the left. if RTL, will be on the right
-    center: '',
-    end: 'dayGridMonth,timeGridWeek,timeGridDay' // will normally be on the right. if RTL, will be on the left
-  };
-
-  const select = ({start, end}: DateSelectArg) => {
-    setStartDate(start)
-    setEndDate(end)
-    handleShow()
-  }
-
   return (
     <div className={styles.container}>
-      <FullCalendar
-        plugins={[interactionPlugin, timeGridPlugin, dayGridPlugin]}
-        headerToolbar={toolbar}
-        initialView="dayGridMonth"
-        slotDuration={'00:30:00'}
-        selectable
-        select={(info) => select(info)}
+      <Calendar
+        setEndDate={setEndDate}
+        setStartDate={setStartDate}
+        setShow={setShow}
       />
-      { startDate && endDate &&
+      {startDate && endDate && (
         <DateModal
           show={show}
           setShow={setShow}
           startDate={startDate}
-          endDate={endDate}/>
-      }
+          endDate={endDate}
+        />
+      )}
     </div>
-  )
-}
-
-export default Home
+  );
+};
+export default Home;

@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import useCreateZoom from '../hooks/useCreateZoom';
+import format from 'date-fns/format';
 
 type Props = {
   show: boolean;
@@ -27,7 +28,15 @@ const DateModal: React.FC<Props> = ({ show, setShow, startDate, endDate }: Props
         <Modal.Title>Plan zoom meeting</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {startDate.toDateString()} to {endDate.toDateString()}
+        <p>
+          Date: {format(startDate, 'dd/MM/yyyy')}
+        </p>
+        <p>
+          Begin: {format(startDate, 'HH:mm')}
+        </p>
+        <p>
+          End: {format(endDate, 'HH:mm')}
+        </p>
         <Form.Group className="mb-3" controlId="object">
           <Form.Label>Object: </Form.Label>
           <Form.Control
@@ -37,12 +46,12 @@ const DateModal: React.FC<Props> = ({ show, setShow, startDate, endDate }: Props
             value={topic}
           />
         </Form.Group>
-        { data && <>
-          <div>
-            Confirmed meeting at {data?.start_time}
+        { data && <div>
+            Meeting confirmed!
+            <div>
+              <a href={data?.join_url}>Link</a>
+            </div>
           </div>
-          <a href={data?.join_url}>Link</a>
-        </>
         }
       </Modal.Body>
       <Modal.Footer>
