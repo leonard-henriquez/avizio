@@ -1,20 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
 import FullCalendar, { DateSelectArg } from '@fullcalendar/react';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import DateModal from '../components/DateModal';
 
 const Home: NextPage = () => {
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [show, setShow] = useState(false);
+
+  const handleShow = () => setShow(true);
+
   const toolbar = {
     start: 'title', // will normally be on the left. if RTL, will be on the right
     center: '',
     end: 'dayGridMonth,timeGridWeek,timeGridDay' // will normally be on the right. if RTL, will be on the left
   };
 
-  const select = (info: DateSelectArg) => {
-    alert('selected ' + info.startStr + ' to ' + info.endStr);
+  const select = ({start, end}: DateSelectArg) => {
+    setStartDate(start)
+    setEndDate(end)
+    handleShow()
   }
 
   return (
@@ -27,6 +36,13 @@ const Home: NextPage = () => {
         selectable
         select={(info) => select(info)}
       />
+      { startDate && endDate &&
+        <DateModal
+          show={show}
+          setShow={setShow}
+          startDate={startDate}
+          endDate={endDate}/>
+      }
     </div>
   )
 }
